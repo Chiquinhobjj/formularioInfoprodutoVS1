@@ -3,253 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explorador de Ideias - Login</title>
+    <title>Bate-papo Criativo com IA</title>
     
-    <!-- Inclusão do Tailwind CSS para estilização -->
+    <!-- Inclusão do Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Inclusão da fonte Inter do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Ícones Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
-        .card {
-            perspective: 1000px;
+        #chat-container {
+            scroll-behavior: smooth;
         }
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
+        .chat-bubble {
+            max-width: 80%;
         }
-        .card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .card-back {
-            transform: rotateY(180deg);
-        }
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3b82f6;
+        /* Animação de digitação */
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
+            background-color: #9ca3af;
+            animation: typing 1.4s infinite;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <div class="container mx-auto max-w-4xl p-4 sm:p-8">
-
-        <!-- Seção de Login (Inicialmente visível) -->
-        <div id="login-section">
-            <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
-                <h1 class="text-3xl sm:text-4xl font-bold text-blue-600 mb-4">Bem-vindo(a)!</h1>
-                <p class="text-lg text-gray-600 mb-8">Para começar, por favor, identifique-se. Seus dados ficarão salvos neste navegador para facilitar os próximos envios.</p>
-                <form id="login-form" class="space-y-6 max-w-md mx-auto">
-                    <div>
-                        <label for="login-name" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu Nome</label>
-                        <input type="text" id="login-name" required placeholder="Digite seu nome completo" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition">
-                    </div>
-                    <div>
-                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu E-mail</label>
-                        <input type="email" id="login-email" required placeholder="seu.email@exemplo.com" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition">
-                    </div>
-                    <button type="submit" class="w-full px-10 py-4 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105">
-                        Entrar e Salvar
-                    </button>
-                </form>
+    <div class="w-full max-w-2xl h-[90vh] bg-white rounded-2xl shadow-2xl flex flex-col">
+        <!-- Cabeçalho do Chat -->
+        <div class="p-4 border-b border-gray-200 flex items-center space-x-4">
+            <div class="relative">
+                <img src="https://placehold.co/40x40/6366f1/ffffff?text=AI" alt="Avatar da IA" class="rounded-full">
+                <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white"></span>
+            </div>
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800">Leo, seu assistente de ideias</h2>
+                <p class="text-sm text-gray-500">Online</p>
             </div>
         </div>
 
-        <!-- Seção Principal do Formulário (Inicialmente oculta) -->
-        <div id="main-section" class="hidden">
-            <!-- Mensagem de boas-vindas e botão de sair -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 flex items-center justify-between">
-                <p id="welcome-message" class="text-lg text-gray-700"></p>
-                <button id="logout-button" class="text-sm text-red-500 hover:text-red-700 font-semibold">Sair</button>
-            </div>
+        <!-- Corpo do Chat -->
+        <div id="chat-container" class="flex-1 p-6 space-y-4 overflow-y-auto">
+            <!-- As mensagens do chat serão inseridas aqui -->
+        </div>
 
-            <!-- Formulário principal -->
-            <form id="idea-form" name="idea-form" class="space-y-10">
-                <!-- Campos ocultos para nome e email, que serão preenchidos automaticamente -->
-                <input type="hidden" id="nome_entrevistado" name="nome_entrevistado">
-                <input type="hidden" id="email_entrevistado" name="email_entrevistado">
-
-                <!-- Container dos Flashcards (mesma estrutura de antes) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Card 1: Talento -->
-                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')">
-                        <div class="card-inner">
-                            <div class="card-front bg-blue-500 text-white text-center">
-                                <h2 class="text-2xl font-bold">Pergunta 1</h2>
-                                <p class="mt-2">Seu Talento Natural</p>
-                                <span class="mt-4 text-sm font-light">(Clique para virar e responder)</span>
-                            </div>
-                            <div class="card-back bg-white">
-                                <label for="resposta_talento" class="font-semibold text-center mb-2">O que você mais gosta de fazer que as pessoas sempre te pedem ajuda ou elogiam?</label>
-                                <textarea name="resposta_talento" id="resposta_talento" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Organizar festas, dar dicas de viagem..." onclick="event.stopPropagation()"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Outros cards (2, 3, 4, 5) vão aqui, idênticos à versão anterior -->
-                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="card-front bg-green-500 text-white text-center"><h2 class="text-2xl font-bold">Pergunta 2</h2><p class="mt-2">Problema & Solução</p><span class="mt-4 text-sm font-light">(Clique para virar)</span></div><div class="card-back bg-white"><label for="resposta_problema_solucao" class="font-semibold text-center mb-2">Qual é a 'dor' que essa pessoa sente antes da sua ajuda, e qual o 'alívio' que ela tem depois?</label><textarea name="resposta_problema_solucao" id="resposta_problema_solucao" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Antes: estresse. Depois: paz..." onclick="event.stopPropagation()"></textarea></div></div></div>
-                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="card-front bg-purple-500 text-white text-center"><h2 class="text-2xl font-bold">Pergunta 3</h2><p class="mt-2">Seu "Pulo do Gato"</p><span class="mt-4 text-sm font-light">(Clique para virar)</span></div><div class="card-back bg-white"><label for="resposta_diferencial" class="font-semibold text-center mb-2">Existe algum segredo ou atalho que torna seu jeito de fazer mais fácil, rápido ou econômico?</label><textarea name="resposta_diferencial" id="resposta_diferencial" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Um app, uma planilha..." onclick="event.stopPropagation()"></textarea></div></div></div>
-                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="card-front bg-yellow-500 text-white text-center"><h2 class="text-2xl font-bold">Pergunta 4</h2><p class="mt-2">Para Quem?</p><span class="mt-4 text-sm font-light">(Clique para virar)</span></div><div class="card-back bg-white"><label for="resposta_publico_alvo" class="font-semibold text-center mb-2">Quem são as pessoas que você acha que mais precisam desse tipo de ajuda ou informação?</label><textarea name="resposta_publico_alvo" id="resposta_publico_alvo" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Mães de primeira viagem..." onclick="event.stopPropagation()"></textarea></div></div></div>
-                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="card-front bg-red-500 text-white text-center"><h2 class="text-2xl font-bold">Pergunta 5</h2><p class="mt-2">Formato da Ideia</p><span class="mt-4 text-sm font-light">(Clique para virar)</span></div><div class="card-back bg-white"><label for="resposta_formato_ideia" class="font-semibold text-center mb-2">Se fosse para compartilhar uma "pitada" do seu conhecimento, qual seria a forma mais simples?</label><textarea name="resposta_formato_ideia" id="resposta_formato_ideia" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Um checklist em PDF..." onclick="event.stopPropagation()"></textarea></div></div></div>
-                </div>
-
-                <!-- Botão de Envio e Mensagem de Feedback -->
-                <div class="text-center pt-6">
-                    <button type="submit" id="submit-button" class="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700">
-                        <span id="button-text">Enviar Ideias</span>
-                        <div id="button-loader" class="loader hidden ml-3"></div>
-                    </button>
-                    <div id="feedback-message" class="mt-6 text-center p-4 rounded-lg text-sm hidden"></div>
-                </div>
+        <!-- Rodapé com campo de digitação -->
+        <div class="p-4 border-t border-gray-200 bg-white">
+            <form id="chat-form" class="flex items-center space-x-3">
+                <input type="text" id="user-input" placeholder="Digite sua resposta..." autocomplete="off" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 transition" required>
+                <button type="submit" class="p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-transform transform hover:scale-110">
+                    <i class="ph-paper-plane-tilt text-2xl"></i>
+                </button>
             </form>
         </div>
     </div>
 
     <script>
-        // Seleciona os elementos do DOM
-        const loginSection = document.getElementById('login-section');
-        const mainSection = document.getElementById('main-section');
-        const loginForm = document.getElementById('login-form');
-        const ideaForm = document.getElementById('idea-form');
-        const welcomeMessage = document.getElementById('welcome-message');
-        const logoutButton = document.getElementById('logout-button');
+        // --- ELEMENTOS DO DOM ---
+        const chatContainer = document.getElementById('chat-container');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+
+        // --- URL DO SEU SCRIPT (NÃO MUDA) ---
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbx3MDmfT-sgCvLcHFPKrvTYD38Y31X8HJWAPyFZYxLeur9wicbZ1yD9WITlQfd1W1t0RA/exec';
+
+        // --- ESTADO DA CONVERSA ---
+        let conversationState = {
+            currentStep: 'GREETING', // GREETING, ASK_NAME, ASK_EMAIL, Q1, Q2, Q3, Q4, Q5, DONE
+            userName: '',
+            userEmail: '',
+            answers: {
+                resposta_talento: '',
+                resposta_problema_solucao: '',
+                resposta_diferencial: '',
+                resposta_publico_alvo: '',
+                resposta_formato_ideia: ''
+            },
+            chatHistory: [] // Histórico para a IA
+        };
         
-        const submitButton = document.getElementById('submit-button');
-        const buttonText = document.getElementById('button-text');
-        const buttonLoader = document.getElementById('button-loader');
-        const feedbackMessage = document.getElementById('feedback-message');
+        const questions = {
+            Q1: "Vamos lá! O que você mais gosta de fazer ou de resolver no seu dia a dia que as pessoas sempre te pedem ajuda ou elogiam?",
+            Q2: "Interessante! E quando você ajuda alguém com isso, qual é a principal 'dor' ou desafio que essa pessoa está sentindo antes da sua ajuda? E qual é o 'alívio' que ela tem depois?",
+            Q3: "Entendi! E existe algum 'segredo' ou um atalho, uma forma diferente que você faz isso que torna o seu jeito mais fácil, rápido ou divertido?",
+            Q4: "Legal! E pensando em quem se beneficiaria mais disso, quem são as pessoas que você acha que mais precisam desse tipo de ajuda ou informação?",
+            Q5: "Ótimo! E para fechar: se você fosse dar uma 'pitadinha' desse conhecimento para as pessoas, qual seria a forma mais simples e rápida de compartilhar? Tipo, um checklist, uma mini aula..."
+        };
 
-        // URL do Google Apps Script (não muda)
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbx3MDmfT-sgCvLcHFPKrvTYD38Y31X8HJWAPyFZYxLeur9wicbZ1yD9WITlQfd1W1t0RA/exec';
+        // --- FUNÇÕES DO CHAT ---
 
-        // Função para verificar se o usuário já está logado
-        function checkLogin() {
-            const userName = localStorage.getItem('userName');
-            const userEmail = localStorage.getItem('userEmail');
-
-            if (userName && userEmail) {
-                // Se estiver logado, mostra a seção principal
-                loginSection.classList.add('hidden');
-                mainSection.classList.remove('hidden');
-                
-                // Define a mensagem de boas-vindas
-                welcomeMessage.textContent = `Olá, ${userName}! Preencha o formulário abaixo.`;
-                
-                // Preenche os campos ocultos do formulário principal
-                document.getElementById('nome_entrevistado').value = userName;
-                document.getElementById('email_entrevistado').value = userEmail;
-            } else {
-                // Se não estiver logado, mostra a seção de login
-                loginSection.classList.remove('hidden');
-                mainSection.classList.add('hidden');
-            }
-        }
-
-        // Evento para o formulário de login
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('login-name').value;
-            const email = document.getElementById('login-email').value;
-
-            // Salva os dados no localStorage
-            localStorage.setItem('userName', name);
-            localStorage.setItem('userEmail', email);
-
-            // Atualiza a interface
-            checkLogin();
-        });
-
-        // Evento para o botão de logout
-        logoutButton.addEventListener('click', () => {
-            // Remove os dados do localStorage
-            localStorage.removeItem('userName');
-            localStorage.removeItem('userEmail');
+        // Adiciona uma mensagem na tela
+        function addMessage(text, sender) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('chat-bubble', 'p-3', 'rounded-xl', 'w-fit');
             
-            // Volta para a tela de login
-            checkLogin();
-        });
-        
-        // Evento para o formulário principal de ideias
-        ideaForm.addEventListener('submit', e => {
-            e.preventDefault();
-            setLoading(true);
-
-            fetch(scriptURL, { method: 'POST', body: new FormData(ideaForm) })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.result === 'success') {
-                        showFeedback('Ideias enviadas com sucesso! Obrigado.', 'success');
-                        ideaForm.reset(); // Limpa apenas as respostas dos flashcards
-                        // Preenche os dados do usuário novamente nos campos ocultos após o reset
-                        document.getElementById('nome_entrevistado').value = localStorage.getItem('userName');
-                        document.getElementById('email_entrevistado').value = localStorage.getItem('userEmail');
-                        document.querySelectorAll('.card.flipped').forEach(card => card.classList.remove('flipped'));
-                    } else {
-                        throw new Error(data.message || 'Ocorreu um erro desconhecido.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro!', error.message);
-                    showFeedback(`Ocorreu um erro ao enviar: ${error.message}`, 'error');
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        });
-
-        // Funções de UI (setLoading, showFeedback) - sem alterações
-        function setLoading(isLoading) {
-            submitButton.disabled = isLoading;
-            buttonText.classList.toggle('hidden', isLoading);
-            buttonLoader.classList.toggle('hidden', !isLoading);
-        }
-
-        function showFeedback(message, type) {
-            feedbackMessage.textContent = message;
-            feedbackMessage.className = 'mt-6 text-center p-4 rounded-lg text-sm';
-            if (type === 'success') {
-                feedbackMessage.classList.add('bg-green-100', 'text-green-800');
+            if (sender === 'user') {
+                bubble.classList.add('bg-blue-600', 'text-white', 'self-end');
             } else {
-                feedbackMessage.classList.add('bg-red-100', 'text-red-800');
+                bubble.classList.add('bg-gray-200', 'text-gray-800', 'self-start');
             }
-            setTimeout(() => {
-                feedbackMessage.className = 'mt-6 text-center p-4 rounded-lg text-sm hidden';
-            }, 7000);
+            bubble.textContent = text;
+            chatContainer.appendChild(bubble);
+            chatContainer.scrollTop = chatContainer.scrollHeight; // Rola para a última mensagem
         }
 
-        // Verifica o login assim que a página é carregada
-        document.addEventListener('DOMContentLoaded', checkLogin);
-    </script>
+        // Mostra o indicador "digitando..."
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.classList.add('chat-bubble', 'p-3', 'rounded-xl', 'self-start', 'bg-gray-200');
+            typingDiv.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
 
+        // Remove o indicador "digitando..."
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // --- LÓGICA DA IA E DA CONVERSA ---
+        
+        // Função principal que lida com a resposta do usuário
+        async function handleUserInput(message) {
+            addMessage(message, 'user');
+            updateChatHistory('user', message);
+            userInput.value = '';
+            showTypingIndicator();
+
+            // Processa a etapa atual da conversa
+            switch(conversationState.currentStep) {
+                case 'GREETING': // A IA já se apresentou, agora está esperando o nome
+                    conversationState.userName = message;
+                    conversationState.currentStep = 'ASK_EMAIL';
+                    askQuestion("Ótimo nome! E qual o seu melhor e-mail?");
+                    break;
+                case 'ASK_EMAIL':
+                    conversationState.userEmail = message;
+                    conversationState.currentStep = 'Q1';
+                    askQuestion(`Perfeito, ${conversationState.userName}! Vamos começar nosso bate-papo criativo. ` + questions.Q1);
+                    break;
+                case 'Q1':
+                    conversationState.answers.resposta_talento = message;
+                    conversationState.currentStep = 'Q2';
+                    askQuestion(await getNaturalTransition() + questions.Q2);
+                    break;
+                case 'Q2':
+                    conversationState.answers.resposta_problema_solucao = message;
+                    conversationState.currentStep = 'Q3';
+                    askQuestion(await getNaturalTransition() + questions.Q3);
+                    break;
+                case 'Q3':
+                    conversationState.answers.resposta_diferencial = message;
+                    conversationState.currentStep = 'Q4';
+                    askQuestion(await getNaturalTransition() + questions.Q4);
+                    break;
+                case 'Q4':
+                    conversationState.answers.resposta_publico_alvo = message;
+                    conversationState.currentStep = 'Q5';
+                    askQuestion(await getNaturalTransition() + questions.Q5);
+                    break;
+                case 'Q5':
+                    conversationState.answers.resposta_formato_ideia = message;
+                    conversationState.currentStep = 'DONE';
+                    await submitDataToSheet();
+                    askQuestion("Incrível! Tenho tudo o que preciso. Muito obrigado pela conversa e pelas ideias! Se quiser enviar mais, é só recarregar a página.");
+                    userInput.disabled = true; // Desabilita o input no final
+                    break;
+            }
+        }
+
+        function askQuestion(questionText) {
+            hideTypingIndicator();
+            addMessage(questionText, 'ai');
+            updateChatHistory('assistant', questionText);
+        }
+        
+        // Gera uma transição natural usando a IA
+        async function getNaturalTransition() {
+            const prompt = `Gere uma frase de transição curta, positiva e natural para a próxima pergunta de uma entrevista, como "Interessante!", "Entendi, legal!", "Faz sentido!". Seja breve.`;
+            try {
+                const response = await callGeminiAPI(prompt, false); // Não adiciona ao histórico principal
+                return response + " ";
+            } catch (error) {
+                console.error("Erro na transição da IA:", error);
+                return "Legal! "; // Fallback
+            }
+        }
+        
+        // Atualiza o histórico do chat para a IA
+        function updateChatHistory(role, text) {
+            conversationState.chatHistory.push({ role: role, parts: [{ text: text }] });
+        }
+
+        // Função para chamar a API Gemini
+        async function callGeminiAPI(prompt, addToHistory = true) {
+            // SUA CHAVE DE API FOI INSERIDA AQUI
+            const apiKey = "AIzaSyBR-trMHNiQfYhMUk3uqzDf8jl1OmtwQKc";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ role: "user", parts: [{ text: prompt }] }]
+            };
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            const text = result.candidates[0].content.parts[0].text;
+            
+            if (addToHistory) {
+                updateChatHistory('assistant', text);
+            }
+            return text;
+        }
+        
+        // Envia os dados para a Planilha Google
+        async function submitDataToSheet() {
+            const formData = new FormData();
+            formData.append('nome_entrevistado', conversationState.userName);
+            formData.append('email_entrevistado', conversationState.userEmail);
+            for (const key in conversationState.answers) {
+                formData.append(key, conversationState.answers[key]);
+            }
+
+            try {
+                const response = await fetch(googleScriptURL, { method: 'POST', body: formData });
+                const data = await response.json();
+                if (data.result !== 'success') {
+                    throw new Error(data.message);
+                }
+                console.log('Dados enviados com sucesso!');
+            } catch (error) {
+                console.error('Erro ao enviar para a planilha!', error);
+                addMessage("Ops, tive um problema para salvar suas respostas. Mas não se preocupe, elas estão seguras aqui na conversa.", 'ai');
+            }
+        }
+
+        // --- INÍCIO DA CONVERSA ---
+        
+        // Evento de envio do formulário
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (message) {
+                handleUserInput(message);
+            }
+        });
+
+        // Inicia a conversa quando a página carrega
+        window.addEventListener('load', () => {
+            const initialMessage = "Olá! Eu sou o Leo, seu assistente de ideias. Nosso bate-papo vai ser rápido e divertido, prometo! Para começar, qual o seu nome?";
+            addMessage(initialMessage, 'ai');
+            updateChatHistory('assistant', initialMessage);
+        });
+
+    </script>
 </body>
 </html>
