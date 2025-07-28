@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explorador de Ideias - Um Bate-papo Criativo</title>
+    <title>Explorador de Ideias - Login</title>
     
     <!-- Inclusão do Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Inclusão da fonte Inter do Google Fonts para uma melhor aparência -->
+    <!-- Inclusão da fonte Inter do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,6 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Efeito 3D para os cartões */
         .card {
             perspective: 1000px;
         }
@@ -28,7 +27,6 @@
             transition: transform 0.6s;
             transform-style: preserve-3d;
         }
-        /* Vira o cartão quando a classe 'flipped' é adicionada */
         .card.flipped .card-inner {
             transform: rotateY(180deg);
         }
@@ -42,18 +40,16 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border-radius: 1rem; /* Bordas arredondadas */
+            border-radius: 1rem;
             padding: 1.5rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        /* A parte de trás do cartão começa virada */
         .card-back {
             transform: rotateY(180deg);
         }
-        /* Animação de carregamento (spinner) */
         .loader {
-            border: 4px solid #f3f3f3; /* Cinza claro */
-            border-top: 4px solid #3b82f6; /* Azul */
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -69,146 +65,154 @@
 
     <div class="container mx-auto max-w-4xl p-4 sm:p-8">
 
-        <!-- Seção de Introdução (A "Isca Digital") -->
-        <div class="bg-white rounded-2xl shadow-lg p-8 mb-12 text-center">
-            <h1 class="text-3xl sm:text-4xl font-bold text-blue-600 mb-4">Uma Ideia no Ar...</h1>
-            <p class="text-lg text-gray-600 leading-relaxed">
-                Sabe quando temos um "jeitinho" único de resolver problemas que pode valer ouro para outras pessoas? Às vezes, um pequeno atalho que você usa no dia a dia é a grande solução para alguém.
-            </p>
-            <p class="text-lg text-gray-600 leading-relaxed mt-4">
-                Vamos fazer uma chuva de ideias divertida? Responda a estas perguntas como um bate-papo!
-            </p>
+        <!-- Seção de Login (Inicialmente visível) -->
+        <div id="login-section">
+            <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
+                <h1 class="text-3xl sm:text-4xl font-bold text-blue-600 mb-4">Bem-vindo(a)!</h1>
+                <p class="text-lg text-gray-600 mb-8">Para começar, por favor, identifique-se. Seus dados ficarão salvos neste navegador para facilitar os próximos envios.</p>
+                <form id="login-form" class="space-y-6 max-w-md mx-auto">
+                    <div>
+                        <label for="login-name" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu Nome</label>
+                        <input type="text" id="login-name" required placeholder="Digite seu nome completo" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu E-mail</label>
+                        <input type="email" id="login-email" required placeholder="seu.email@exemplo.com" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <button type="submit" class="w-full px-10 py-4 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105">
+                        Entrar e Salvar
+                    </button>
+                </form>
+            </div>
         </div>
 
-        <!-- Formulário principal -->
-        <form id="idea-form" name="idea-form" class="space-y-10">
-
-            <!-- Campos de Nome e Email -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 rounded-2xl shadow-lg">
-                <div>
-                    <label for="nome_entrevistado" class="block text-sm font-medium text-gray-700 mb-1">Seu Nome</label>
-                    <input type="text" id="nome_entrevistado" name="nome_entrevistado" required placeholder="Digite seu nome completo" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition">
-                </div>
-                <div>
-                    <label for="email_entrevistado" class="block text-sm font-medium text-gray-700 mb-1">Seu E-mail</label>
-                    <input type="email" id="email_entrevistado" name="email_entrevistado" required placeholder="seu.email@exemplo.com" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition">
-                </div>
+        <!-- Seção Principal do Formulário (Inicialmente oculta) -->
+        <div id="main-section" class="hidden">
+            <!-- Mensagem de boas-vindas e botão de sair -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 flex items-center justify-between">
+                <p id="welcome-message" class="text-lg text-gray-700"></p>
+                <button id="logout-button" class="text-sm text-red-500 hover:text-red-700 font-semibold">Sair</button>
             </div>
 
-            <!-- Container dos Flashcards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- Card 1: Talento -->
-                <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')">
-                    <div class="card-inner">
-                        <div class="card-front bg-blue-500 text-white text-center">
-                            <h2 class="text-2xl font-bold">Pergunta 1</h2>
-                            <p class="mt-2">Seu Talento Natural</p>
-                            <span class="mt-4 text-sm font-light">(Clique para virar e responder)</span>
-                        </div>
-                        <div class="card-back bg-white">
-                            <label for="resposta_talento" class="font-semibold text-center mb-2">O que você mais gosta de fazer que as pessoas sempre te pedem ajuda ou elogiam?</label>
-                            <textarea name="resposta_talento" id="resposta_talento" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Organizar festas, dar dicas de viagem..." onclick="event.stopPropagation()"></textarea>
+            <!-- Formulário principal -->
+            <form id="idea-form" name="idea-form" class="space-y-10">
+                <!-- Campos ocultos para nome e email, que serão preenchidos automaticamente -->
+                <input type="hidden" id="nome_entrevistado" name="nome_entrevistado">
+                <input type="hidden" id="email_entrevistado" name="email_entrevistado">
+
+                <!-- Container dos Flashcards (mesma estrutura de antes) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Card 1: Talento -->
+                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner">
+                            <div class="card-front bg-blue-500 text-white text-center">
+                                <h2 class="text-2xl font-bold">Pergunta 1</h2>
+                                <p class="mt-2">Seu Talento Natural</p>
+                                <span class="mt-4 text-sm font-light">(Clique para virar e responder)</span>
+                            </div>
+                            <div class="card-back bg-white">
+                                <label for="resposta_talento" class="font-semibold text-center mb-2">O que você mais gosta de fazer que as pessoas sempre te pedem ajuda ou elogiam?</label>
+                                <textarea name="resposta_talento" id="resposta_talento" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Organizar festas, dar dicas de viagem..." onclick="event.stopPropagation()"></textarea>
+                            </div>
                         </div>
                     </div>
+                    <!-- Outros cards (2, 3, 4, 5) vão aqui, idênticos à versão anterior -->
+                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="card-front bg-green-500 text-white text-center"><h2 class="text-2xl font-bold">Pergunta 2</h2><p class="mt-2">Problema & Solução</p><span class="mt-4 text-sm font-light">(Clique para virar)</span></div><div class="card-back bg-white"><label for="resposta_problema_solucao" class="font-semibold text-center mb-2">Qual é a 'dor' que essa pessoa sente antes da sua ajuda, e qual o 'alívio' que ela tem depois?</label><textarea name="resposta_problema_solucao" id="resposta_problema_solucao" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Antes: estresse. Depois: paz..." onclick="event.stopPropagation()"></textarea></div></div></div>
+                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="card-front bg-purple-500 text-white text-center"><h2 class="text-2xl font-bold">Pergunta 3</h2><p class="mt-2">Seu "Pulo do Gato"</p><span class="mt-4 text-sm font-light">(Clique para virar)</span></div><div class="card-back bg-white"><label for="resposta_diferencial" class="font-semibold text-center mb-2">Existe algum segredo ou atalho que torna seu jeito de fazer mais fácil, rápido ou econômico?</label><textarea name="resposta_diferencial" id="resposta_diferencial" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Um app, uma planilha..." onclick="event.stopPropagation()"></textarea></div></div></div>
+                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="card-front bg-yellow-500 text-white text-center"><h2 class="text-2xl font-bold">Pergunta 4</h2><p class="mt-2">Para Quem?</p><span class="mt-4 text-sm font-light">(Clique para virar)</span></div><div class="card-back bg-white"><label for="resposta_publico_alvo" class="font-semibold text-center mb-2">Quem são as pessoas que você acha que mais precisam desse tipo de ajuda ou informação?</label><textarea name="resposta_publico_alvo" id="resposta_publico_alvo" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Mães de primeira viagem..." onclick="event.stopPropagation()"></textarea></div></div></div>
+                    <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="card-front bg-red-500 text-white text-center"><h2 class="text-2xl font-bold">Pergunta 5</h2><p class="mt-2">Formato da Ideia</p><span class="mt-4 text-sm font-light">(Clique para virar)</span></div><div class="card-back bg-white"><label for="resposta_formato_ideia" class="font-semibold text-center mb-2">Se fosse para compartilhar uma "pitada" do seu conhecimento, qual seria a forma mais simples?</label><textarea name="resposta_formato_ideia" id="resposta_formato_ideia" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Um checklist em PDF..." onclick="event.stopPropagation()"></textarea></div></div></div>
                 </div>
 
-                <!-- Card 2: Problema e Solução -->
-                <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')">
-                    <div class="card-inner">
-                        <div class="card-front bg-green-500 text-white text-center">
-                            <h2 class="text-2xl font-bold">Pergunta 2</h2>
-                            <p class="mt-2">Problema & Solução</p>
-                            <span class="mt-4 text-sm font-light">(Clique para virar e responder)</span>
-                        </div>
-                        <div class="card-back bg-white">
-                            <label for="resposta_problema_solucao" class="font-semibold text-center mb-2">Qual é a 'dor' que essa pessoa sente antes da sua ajuda, e qual o 'alívio' que ela tem depois?</label>
-                            <textarea name="resposta_problema_solucao" id="resposta_problema_solucao" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Antes: estresse. Depois: paz, clareza..." onclick="event.stopPropagation()"></textarea>
-                        </div>
-                    </div>
+                <!-- Botão de Envio e Mensagem de Feedback -->
+                <div class="text-center pt-6">
+                    <button type="submit" id="submit-button" class="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700">
+                        <span id="button-text">Enviar Ideias</span>
+                        <div id="button-loader" class="loader hidden ml-3"></div>
+                    </button>
+                    <div id="feedback-message" class="mt-6 text-center p-4 rounded-lg text-sm hidden"></div>
                 </div>
-
-                <!-- Card 3: O Segredo -->
-                <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')">
-                    <div class="card-inner">
-                        <div class="card-front bg-purple-500 text-white text-center">
-                            <h2 class="text-2xl font-bold">Pergunta 3</h2>
-                            <p class="mt-2">Seu "Pulo do Gato"</p>
-                            <span class="mt-4 text-sm font-light">(Clique para virar e responder)</span>
-                        </div>
-                        <div class="card-back bg-white">
-                            <label for="resposta_diferencial" class="font-semibold text-center mb-2">Existe algum segredo ou atalho que torna seu jeito de fazer mais fácil, rápido ou econômico?</label>
-                            <textarea name="resposta_diferencial" id="resposta_diferencial" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Um app que uso, uma planilha, uma técnica..." onclick="event.stopPropagation()"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4: Público -->
-                <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')">
-                    <div class="card-inner">
-                        <div class="card-front bg-yellow-500 text-white text-center">
-                            <h2 class="text-2xl font-bold">Pergunta 4</h2>
-                            <p class="mt-2">Para Quem?</p>
-                            <span class="mt-4 text-sm font-light">(Clique para virar e responder)</span>
-                        </div>
-                        <div class="card-back bg-white">
-                            <label for="resposta_publico_alvo" class="font-semibold text-center mb-2">Quem são as pessoas que você acha que mais precisam desse tipo de ajuda ou informação?</label>
-                            <textarea name="resposta_publico_alvo" id="resposta_publico_alvo" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Mães de primeira viagem, jovens..." onclick="event.stopPropagation()"></textarea>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Card 5: Formato -->
-                <div class="card h-80 cursor-pointer" onclick="this.classList.toggle('flipped')">
-                    <div class="card-inner">
-                        <div class="card-front bg-red-500 text-white text-center">
-                            <h2 class="text-2xl font-bold">Pergunta 5</h2>
-                            <p class="mt-2">Formato da Ideia</p>
-                            <span class="mt-4 text-sm font-light">(Clique para virar e responder)</span>
-                        </div>
-                        <div class="card-back bg-white">
-                            <label for="resposta_formato_ideia" class="font-semibold text-center mb-2">Se fosse para compartilhar uma "pitada" do seu conhecimento, qual seria a forma mais simples?</label>
-                            <textarea name="resposta_formato_ideia" id="resposta_formato_ideia" rows="4" class="w-full p-2 bg-gray-100 rounded-lg text-sm" placeholder="Ex: Um checklist em PDF, uma mini aula..." onclick="event.stopPropagation()"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Botão de Envio e Mensagem de Feedback -->
-            <div class="text-center pt-6">
-                <button type="submit" id="submit-button" class="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105">
-                    <span id="button-text">Enviar Ideias</span>
-                    <div id="button-loader" class="loader hidden ml-3"></div>
-                </button>
-                <div id="feedback-message" class="mt-6 text-center p-4 rounded-lg text-sm hidden"></div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <script>
-        const form = document.getElementById('idea-form');
+        // Seleciona os elementos do DOM
+        const loginSection = document.getElementById('login-section');
+        const mainSection = document.getElementById('main-section');
+        const loginForm = document.getElementById('login-form');
+        const ideaForm = document.getElementById('idea-form');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const logoutButton = document.getElementById('logout-button');
+        
         const submitButton = document.getElementById('submit-button');
         const buttonText = document.getElementById('button-text');
         const buttonLoader = document.getElementById('button-loader');
         const feedbackMessage = document.getElementById('feedback-message');
 
-        // SUA URL FOI INSERIDA AQUI.
+        // URL do Google Apps Script (não muda)
         const scriptURL = 'https://script.google.com/macros/s/AKfycbx3MDmfT-sgCvLcHFPKrvTYD38Y31X8HJWAPyFZYxLeur9wicbZ1yD9WITlQfd1W1t0RA/exec';
 
-        form.addEventListener('submit', e => {
-            e.preventDefault(); // Impede o recarregamento da página
+        // Função para verificar se o usuário já está logado
+        function checkLogin() {
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
 
+            if (userName && userEmail) {
+                // Se estiver logado, mostra a seção principal
+                loginSection.classList.add('hidden');
+                mainSection.classList.remove('hidden');
+                
+                // Define a mensagem de boas-vindas
+                welcomeMessage.textContent = `Olá, ${userName}! Preencha o formulário abaixo.`;
+                
+                // Preenche os campos ocultos do formulário principal
+                document.getElementById('nome_entrevistado').value = userName;
+                document.getElementById('email_entrevistado').value = userEmail;
+            } else {
+                // Se não estiver logado, mostra a seção de login
+                loginSection.classList.remove('hidden');
+                mainSection.classList.add('hidden');
+            }
+        }
+
+        // Evento para o formulário de login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('login-name').value;
+            const email = document.getElementById('login-email').value;
+
+            // Salva os dados no localStorage
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userEmail', email);
+
+            // Atualiza a interface
+            checkLogin();
+        });
+
+        // Evento para o botão de logout
+        logoutButton.addEventListener('click', () => {
+            // Remove os dados do localStorage
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            
+            // Volta para a tela de login
+            checkLogin();
+        });
+        
+        // Evento para o formulário principal de ideias
+        ideaForm.addEventListener('submit', e => {
+            e.preventDefault();
             setLoading(true);
 
-            // Envia os dados do formulário para o Google Apps Script
-            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+            fetch(scriptURL, { method: 'POST', body: new FormData(ideaForm) })
                 .then(response => response.json())
                 .then(data => {
                     if (data.result === 'success') {
-                        showFeedback('Ideias enviadas com sucesso! Muito obrigado pela sua contribuição.', 'success');
-                        form.reset(); // Limpa o formulário
-                        // Vira todos os cartões de volta para a frente
+                        showFeedback('Ideias enviadas com sucesso! Obrigado.', 'success');
+                        ideaForm.reset(); // Limpa apenas as respostas dos flashcards
+                        // Preenche os dados do usuário novamente nos campos ocultos após o reset
+                        document.getElementById('nome_entrevistado').value = localStorage.getItem('userName');
+                        document.getElementById('email_entrevistado').value = localStorage.getItem('userEmail');
                         document.querySelectorAll('.card.flipped').forEach(card => card.classList.remove('flipped'));
                     } else {
                         throw new Error(data.message || 'Ocorreu um erro desconhecido.');
@@ -219,31 +223,32 @@
                     showFeedback(`Ocorreu um erro ao enviar: ${error.message}`, 'error');
                 })
                 .finally(() => {
-                    setLoading(false); // Garante que o botão volte ao normal
+                    setLoading(false);
                 });
         });
 
-        // Função para mostrar o estado de carregamento no botão
+        // Funções de UI (setLoading, showFeedback) - sem alterações
         function setLoading(isLoading) {
             submitButton.disabled = isLoading;
             buttonText.classList.toggle('hidden', isLoading);
             buttonLoader.classList.toggle('hidden', !isLoading);
         }
 
-        // Função para mostrar mensagens de sucesso ou erro
         function showFeedback(message, type) {
             feedbackMessage.textContent = message;
-            feedbackMessage.className = 'mt-6 text-center p-4 rounded-lg text-sm'; // Reseta classes
+            feedbackMessage.className = 'mt-6 text-center p-4 rounded-lg text-sm';
             if (type === 'success') {
                 feedbackMessage.classList.add('bg-green-100', 'text-green-800');
             } else {
                 feedbackMessage.classList.add('bg-red-100', 'text-red-800');
             }
-            // Esconde a mensagem após 7 segundos
             setTimeout(() => {
                 feedbackMessage.className = 'mt-6 text-center p-4 rounded-lg text-sm hidden';
             }, 7000);
         }
+
+        // Verifica o login assim que a página é carregada
+        document.addEventListener('DOMContentLoaded', checkLogin);
     </script>
 
 </body>
